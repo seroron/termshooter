@@ -3,6 +3,7 @@
 #include "Field.h"
 #include "Bullet.h"
 #include "TaskArgTS.h"
+#include "RandomManager.h"
 
 #include <algorithm>
 
@@ -13,7 +14,7 @@ Enemy::Enemy(int x, int y, int mx, int my) {
     my_ = my;
     sx_ = 3;
 		
-    shot_interval_ = 100;
+    shot_interval_ = RandomManager::getInst().getUniformInt(20, 40);;
     move_interval_ = 3;
 }
 
@@ -44,7 +45,7 @@ void Enemy::move(taskarg_sptr arg) {
 			
         if(shot_interval_ <= 0) {
             argts->bullets.push_task(std::make_shared<Bullet>(x_, y_+1, 0, 1, "V"));
-            shot_interval_ = rand() % 10 + 15; //TODO
+            shot_interval_ = RandomManager::getInst().getUniformInt(20, 40);
         }
     }
 		
