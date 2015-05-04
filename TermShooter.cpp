@@ -11,6 +11,7 @@
 
 #include "NCursesManager.h"
 #include "Field.h"
+#include "SideBar.h"
 
 #include "TermShooter.h"
 #include "Task.h"
@@ -46,6 +47,7 @@ void TermShooter::start() {
     arg->ships.push_task(std::make_shared<Ship>());
 
     arg->generals.push_task(std::make_shared<Field>());
+    arg->generals.push_task(std::make_shared<SideBar>());
     
     arg->score       = 0;
     arg->shot_cnt    = 0;
