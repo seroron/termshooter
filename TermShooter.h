@@ -16,8 +16,8 @@ public:
 private:
     void setup_game();
     
-    bool move(taskarg_sptr arg);
-    bool draw(taskarg_sptr arg, float fps);
+    bool move(taskargts_sptr arg);
+    bool draw(taskargts_sptr arg, float fps);
 
     bool reset_;
 };

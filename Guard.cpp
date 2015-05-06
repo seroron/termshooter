@@ -4,6 +4,8 @@
 Guard::Guard(int x, int y) {
     x_ = x;
     y_ = y;
+    sx_ = 1.0f;
+    sy_ = 1.0f;
 }
 
 Guard::~Guard() {

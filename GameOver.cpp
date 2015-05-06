@@ -2,8 +2,26 @@
 
 #include "Field.h"
 #include "NCursesManager.h"
+#include "TaskArgTS.h"
 
-GameOver::GameOver() {
+GameOver::GameOver(taskarg_sptr arg) {
+
+    // pause game objects
+    for(auto& i : arg->enemies) {
+        i->set_movable(false);
+    }
+    
+    for(auto& i : arg->ships) {
+        i->set_movable(false);
+    }
+    
+    for(auto& i : arg->bullets) {
+        i->set_movable(false);
+    }
+    
+    for(auto& i : arg->guards) {
+        i->set_movable(false);
+    }
 }
 	
 GameOver::~GameOver() {

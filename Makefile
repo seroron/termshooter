@@ -8,7 +8,7 @@ MV	 := mv
 
 TARGET   := termshooter
 LIBRARY  := -lncurses
-CXXFLAGS := -Wall -O2 -std=c++1y -I/usr/include/ncurses
+CXXFLAGS := -std=c++1y -I/usr/include/ncurses -Wall -Wextra -Wno-unused-parameter -O2 
 
 SRC_DIR  += .
 SRC      += $(foreach dir,$(SRC_DIR), $(wildcard $(dir)/*.cpp)) 

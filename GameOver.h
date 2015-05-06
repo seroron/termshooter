@@ -2,9 +2,11 @@
 
 #include "Task.h"
 
-class GameOver : public Task {
+struct TaskArgTS;
+
+class GameOver : public Task<TaskArgTS> {
 public:
-    GameOver();
+    GameOver(taskarg_sptr arg);
     virtual ~GameOver();
     
     virtual void move(taskarg_sptr arg);    

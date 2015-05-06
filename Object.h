@@ -1,9 +1,11 @@
 #pragma once
 
 #include "Task.h"
+//#include "TaskArgTS.h"
 
-class Object : public Task 
-{
+struct TaskArgTS;
+
+class Object : public Task<TaskArgTS> {
 public:
     Object()
     {}
@@ -11,34 +13,28 @@ public:
     virtual ~Object()
     {}
 
-    int get_x() const
-    {
+    int get_x() const {
         return x_;
     }
 
-    int get_y() const
-    {
+    int get_y() const {
         return y_;
     }
 	
-    int get_sx() const
-    {
+    int get_sx() const {
         return sx_;
     }
 
-    int get_hsx() const
-    {
-        return sx_/2;
-    }
-
-    int get_sy() const
-    {
+    int get_sy() const {
         return sy_;
     }
 
-    int get_hsy() const
-    {
-        return sy_/2;
+    bool check_collision(const Object& rhs) const {
+        return
+            x_       < rhs.x_ + rhs.sx_ &&
+            x_ + sx_ > rhs.x_ &&
+            y_       < rhs.y_ + rhs.sy_ &&
+            y_ + sy_ > rhs.y_;
     }
 
 protected:

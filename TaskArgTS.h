@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Task.h"
 #include "TaskContainer.h"
 
@@ -6,7 +8,7 @@
 #include "Guard.h"
 #include "Ship.h"
 
-struct TaskArgTS : public TaskArg {
+struct TaskArgTS {
     
     enum GameState {
         GS_PLAY,
@@ -17,7 +19,7 @@ struct TaskArgTS : public TaskArg {
     TaskContainer<Enemy> enemies;
     TaskContainer<Guard> guards;
     TaskContainer<Ship> ships;
-    TaskContainer<Task> generals;
+    TaskContainer<Task<TaskArgTS>> generals;
     
     int            shot_cnt;
     int            score;		

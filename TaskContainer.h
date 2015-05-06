@@ -6,10 +6,12 @@
 #include <algorithm>
 #include <functional>
 
-template<class T>
-class TaskContainer : public Task {
+template<class TaskType>
+class TaskContainer : public Task<typename TaskType::arg_type> {
 public:
-    typedef typename std::shared_ptr<T> spec_task_sptr;
+    typedef typename TaskType::taskarg_sptr taskarg_sptr;
+    
+    typedef typename std::shared_ptr<TaskType> spec_task_sptr;
     typedef typename std::list<spec_task_sptr>::iterator spec_task_iterator;
     typedef typename std::list<spec_task_sptr>::const_iterator spec_task_const_iterator;
     
@@ -19,7 +21,7 @@ public:
     virtual ~TaskContainer() {
     }
 
-    virtual void move(taskarg_sptr arg) {
+    virtual void move(taskarg_sptr arg) override {
         std::for_each(task_list_.begin(),
                       task_list_.end(),
                       [&](auto &i) {
@@ -41,7 +43,7 @@ public:
         }
     }
     
-    virtual void draw(taskarg_sptr arg) {
+    virtual void draw(taskarg_sptr arg) override {
          std::for_each(task_list_.begin(),
                        task_list_.end(),
                        [&](auto &i) {

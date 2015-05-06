@@ -2,7 +2,9 @@
 
 #include "Task.h"
 
-class Field : public Task {
+struct TaskArgTS;
+
+class Field : public Task<TaskArgTS> {
 public:
     static const int FIELD_X_MIN       = 2;
     static const int FIELD_X_MAX       = 60;

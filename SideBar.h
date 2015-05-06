@@ -2,7 +2,9 @@
 
 #include "Task.h"
 
-class SideBar : public Task {
+struct TaskArgTS;
+
+class SideBar : public Task<TaskArgTS> {
 public:
     SideBar();
     virtual ~SideBar();

@@ -2,14 +2,13 @@
 
 #include <memory>
 
-struct TaskArg {
-};
-
-typedef std::shared_ptr<TaskArg> taskarg_sptr;
-
+template<class ArgType>
 class Task {
 public:
-    // Task(int priority) : 
+    typedef ArgType arg_type;
+    typedef typename std::shared_ptr<arg_type> taskarg_sptr;
+    
+// Task(int priority) : 
     //     dead_(false), priority_(priority) {
     // }
 
@@ -62,4 +61,3 @@ private:
     // int  priority_;
 };
 
-typedef std::shared_ptr<Task> task_sptr;

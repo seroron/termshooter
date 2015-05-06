@@ -6,7 +6,8 @@
 Ship::Ship() {
     x_  = 30;
     y_  = Field::PLAYER_LINE;
-    sx_ = 3;
+    sx_ = 1;
+    sy_ = 1;
     shot_interval_ = 0;
 }
 
@@ -14,9 +15,8 @@ Ship::~Ship() {
 }
 
 void Ship::move(taskarg_sptr arg) {
-    std::shared_ptr<TaskArgTS>  argts = std::static_pointer_cast<TaskArgTS>(arg);
-    
-    switch(argts->key) {
+
+    switch(arg->key) {
     case 'j':
         if(x_>3) x_--;
         break;
@@ -27,12 +27,12 @@ void Ship::move(taskarg_sptr arg) {
 	
     case ' ': 
         if(shot_interval_ <= 0) {
-            argts->bullets.push_task(std::make_shared<Bullet>(x_, y_-1, 0, -1, "T"));
-            argts->shot_cnt++;
+            arg->bullets.push_task(std::make_shared<Bullet>(x_, y_-2, 0, -1, "T"));
+            arg->shot_cnt++;
             
-            argts->score--;
-            if(argts->score<0) {
-                argts->score = 0;
+            arg->score--;
+            if(arg->score<0) {
+                arg->score = 0;
             }
 	  
             shot_interval_ = 5;

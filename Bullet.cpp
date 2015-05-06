@@ -7,6 +7,8 @@ Bullet::Bullet(int x, int y, int mx, int my, std::string aa) {
     mx_ = mx;
     y_  = y;
     my_ = my;
+    sx_ = 1;
+    sy_ = 2;
     aa_ = aa;
 }
 
@@ -28,5 +30,6 @@ void Bullet::move(taskarg_sptr arg) {
 
 void Bullet::draw(taskarg_sptr arg) {
     attrset(COLOR_PAIR(NCursesManager::CC_WHITE));
-    mvprintw(y_, x_, aa_.c_str());
+    mvprintw(y_,   x_, aa_.c_str());
+    mvprintw(y_+1, x_, aa_.c_str());
 }

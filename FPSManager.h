@@ -18,9 +18,6 @@ public:
     ~FPSManager() {
     }
 
-    void test(callback_move_func_t move) {
-    }
-
     void start(callback_move_func_t move, callback_draw_func_t draw, ARG& arg) {
         using namespace std::chrono;
 

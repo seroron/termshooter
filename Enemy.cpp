@@ -13,6 +13,7 @@ Enemy::Enemy(int x, int y, int mx, int my) {
     y_  = y;
     my_ = my;
     sx_ = 3;
+    sy_ = 1;
 		
     shot_interval_ = RandomManager::getInst().getUniformInt(20, 40);;
     move_interval_ = 3;
@@ -22,13 +23,11 @@ Enemy::~Enemy() {
 }
 
 void Enemy::move(taskarg_sptr arg) {
-    std::shared_ptr<TaskArgTS>  argts = std::static_pointer_cast<TaskArgTS>(arg);
-    
     move_interval_--;
     if(move_interval_ <= 0) {
         x_ += mx_;
-        if(x_ - get_hsx() <= Field::FIELD_X_MIN || 
-           Field::FIELD_X_MAX <= x_ + get_hsx()) {
+        if(x_ <= Field::FIELD_X_MIN || 
+           Field::FIELD_X_MAX <= x_ + sx_) {
             
             mx_ *= -1;
             y_++;
@@ -36,15 +35,14 @@ void Enemy::move(taskarg_sptr arg) {
         move_interval_ = 3;
     }
 		
-    //int owny = y_;
-    if(std::all_of(argts->enemies.begin(),
-                   argts->enemies.end(),
+    if(std::all_of(arg->enemies.begin(),
+                   arg->enemies.end(),
                    [=](auto t){return y_>=t->y_;})) {
         
         shot_interval_--;
 			
         if(shot_interval_ <= 0) {
-            argts->bullets.push_task(std::make_shared<Bullet>(x_, y_+1, 0, 1, "V"));
+            arg->bullets.push_task(std::make_shared<Bullet>(x_+1, y_+1, 0, 1, "V"));
             shot_interval_ = RandomManager::getInst().getUniformInt(20, 40);
         }
     }
@@ -57,5 +55,5 @@ void Enemy::move(taskarg_sptr arg) {
 void Enemy::draw(taskarg_sptr arg) {
     
     attrset(COLOR_PAIR(NCursesManager::CC_MAGENTA));
-    mvaddstr(y_, x_ - sx_/2, "EEE");
+    mvaddstr(y_, x_, "EEE");
 }

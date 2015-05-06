@@ -67,77 +67,61 @@ void TermShooter::start() {
     } while(reset_);
 }
 
-bool TermShooter::move(taskarg_sptr arg) {
-    std::shared_ptr<TaskArgTS>  argts = std::static_pointer_cast<TaskArgTS>(arg);
+bool TermShooter::move(taskargts_sptr arg) {
 
     // get keyboard key status
     int save_key = ERR;
     do {
-        argts->key = save_key;
+        arg->key = save_key;
         save_key = getch();
     } while(save_key != ERR);
 
     // reset?
-    if(argts->key== 'r') {
+    if(arg->key== 'r') {
         reset_ = true;
         return false;
-    }    
+    }
     
     // force exit?
-    if(argts->key== 'q') {
+    if(arg->key== 'q') {
         return false;
     }    
     
     // move objects
-    argts->generals.move(arg);
-    argts->ships.move(arg);
-    argts->bullets.move(arg);
-    argts->enemies.move(arg);
-    argts->guards.move(arg);
+    arg->generals.move(arg);
+    arg->ships.move(arg);
+    arg->bullets.move(arg);
+    arg->enemies.move(arg);
+    arg->guards.move(arg);
     
     // 当たり判定
-    for(auto bullet: argts->bullets) {
-        for(auto enemy: argts->enemies) {
-            if(enemy->get_x() - enemy->get_hsx() <= bullet->get_x() &&
-               bullet->get_x() <= enemy->get_x() + enemy->get_hsx() &&
-               enemy->get_y()==bullet->get_y()) {
-                
-                argts->score += 100;
+    for(auto bullet: arg->bullets) {
+        for(auto enemy: arg->enemies) {
+            if(bullet->check_collision(*enemy)) {
+                arg->score += 100;
                 enemy->set_dead(true);
                 bullet->set_dead(true);
             }
         }
 			
-        for(auto guard : argts->guards) {
-            if(guard->get_x() == bullet->get_x() &&
-               guard->get_y() == bullet->get_y()) {
-                
+        for(auto guard : arg->guards) {
+            if(bullet->check_collision(*guard)) {
                 guard->set_dead(true);
                 bullet->set_dead(true);
             }
         }
 
-        for(auto ship: argts->ships) {
-            if(ship->get_x() - ship->get_hsx() <= bullet->get_x() &&
-               bullet->get_x() <= ship->get_x() + ship->get_hsx() &&
-               bullet->get_y() == ship->get_y()) {
-            
-                //argts->game_state = TaskArgTS::GS_GAMEOVER;
-                argts->generals.push_task(std::make_shared<GameOver>());
-
-                // pause game objects
-                for(auto& i : argts->enemies) {
-                    i->set_movable(false);
-                }
-                for(auto& i : argts->ships) {
-                    i->set_movable(false);
-                }
-                for(auto& i : argts->bullets) {
-                    i->set_movable(false);
-                }
-                for(auto& i : argts->guards) {
-                    i->set_movable(false);
-                }
+        for(auto bullet2 : arg->bullets) {
+            if(bullet != bullet2 &&
+               bullet->check_collision(*bullet2)) {
+                bullet->set_dead(true);
+                bullet2->set_dead(true);
+            }
+        }
+        
+        for(auto ship: arg->ships) {
+            if(bullet->check_collision(*ship)) {
+                arg->generals.push_task(std::make_shared<GameOver>(arg));
             }
         }        
     }
@@ -145,17 +129,15 @@ bool TermShooter::move(taskarg_sptr arg) {
     return true;
 }
 
-bool TermShooter::draw(taskarg_sptr arg, float fps) {
-    std::shared_ptr<TaskArgTS>  argts = std::static_pointer_cast<TaskArgTS>(arg);
-
+bool TermShooter::draw(taskargts_sptr arg, float fps) {
+    
     erase();
     
-    argts->ships.draw(arg);
-    argts->generals.draw(arg);
-    argts->bullets.draw(arg);
-    argts->enemies.draw(arg);
-    argts->guards.draw(arg);
-    argts->generals.draw(arg);
+    arg->ships.draw(arg);
+    arg->enemies.draw(arg);
+    arg->guards.draw(arg);
+    arg->bullets.draw(arg);
+    arg->generals.draw(arg);
 
     NCursesManager::getInst().flip();   
     
