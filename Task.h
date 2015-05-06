@@ -14,7 +14,7 @@ public:
     // }
 
     Task() : 
-      dead_(false) {
+        dead_(false), movable_(true), drawable_(true) {
     }
   
     virtual ~Task() {
@@ -34,12 +34,31 @@ public:
         dead_ = d;
     }
 
+    bool is_movable() const {
+        return movable_;
+    }
+
+    void set_movable(bool b) {
+        movable_ = b;
+    }
+
+    bool is_drawable() const {
+        return drawable_;
+    }
+
+    void set_drawable(bool b) {
+        drawable_ = b;
+    }
+
+    
     // int get_priority() const {
     //     return priority_;
     // }
 
 private:
     bool dead_;
+    bool movable_;
+    bool drawable_;
     // int  priority_;
 };
 

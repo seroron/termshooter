@@ -20,10 +20,13 @@ public:
     }
 
     virtual void move(taskarg_sptr arg) {
-        using namespace std::placeholders;
-    
-        std::for_each(task_list_.begin(), task_list_.end(),
-                      std::bind(&Task::move, _1, arg));
+        std::for_each(task_list_.begin(),
+                      task_list_.end(),
+                      [&](auto &i) {
+                          if(i->is_movable()) {
+                              i->move(arg);
+                          }
+                      });
         
         // remove dead task
         auto it  = task_list_.begin();
@@ -39,10 +42,13 @@ public:
     }
     
     virtual void draw(taskarg_sptr arg) {
-        using namespace std::placeholders;
-    
-        std::for_each(task_list_.begin(), task_list_.end(),
-                      std::bind(&Task::draw, _1, arg));
+         std::for_each(task_list_.begin(),
+                       task_list_.end(),
+                       [&](auto &i) {
+                           if(i->is_drawable()) {
+                               i->draw(arg);
+                           }
+                       });
     }
 
     void push_task(spec_task_sptr t) {
