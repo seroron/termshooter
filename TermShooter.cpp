@@ -12,7 +12,7 @@
 #include "NCursesManager.h"
 #include "Field.h"
 #include "SideBar.h"
-
+#include "GameOver.h"
 #include "TermShooter.h"
 #include "Task.h"
 #include "FPSManager.h"
@@ -24,8 +24,8 @@ TermShooter::TermShooter() {
 TermShooter::~TermShooter() {
 }
 
-void TermShooter::start() {
-
+void TermShooter::setup_game() {
+    
     using namespace std::placeholders;
 
     taskargts_sptr arg(std::make_shared<TaskArgTS>());
@@ -51,12 +51,20 @@ void TermShooter::start() {
     
     arg->score       = 0;
     arg->shot_cnt    = 0;
+
+    reset_ = false;
     
     FPSManager<taskargts_sptr> fps_manager;
     fps_manager.start(
         std::bind(&TermShooter::move, this, _1),
         std::bind(&TermShooter::draw, this, _1, _2),
         arg);
+}
+
+void TermShooter::start() {
+    do {
+        setup_game();
+    } while(reset_);
 }
 
 bool TermShooter::move(taskarg_sptr arg) {
@@ -69,6 +77,12 @@ bool TermShooter::move(taskarg_sptr arg) {
         save_key = getch();
     } while(save_key != ERR);
 
+    // reset?
+    if(argts->key== 'r') {
+        reset_ = true;
+        return false;
+    }    
+    
     // force exit?
     if(argts->key== 'q') {
         return false;
@@ -109,11 +123,23 @@ bool TermShooter::move(taskarg_sptr arg) {
                bullet->get_y() == ship->get_y()) {
             
                 //argts->game_state = TaskArgTS::GS_GAMEOVER;
-                
-            }
-        }
+                argts->generals.push_task(std::make_shared<GameOver>());
 
-        
+                // pause game objects
+                for(auto& i : argts->enemies) {
+                    i->set_movable(false);
+                }
+                for(auto& i : argts->ships) {
+                    i->set_movable(false);
+                }
+                for(auto& i : argts->bullets) {
+                    i->set_movable(false);
+                }
+                for(auto& i : argts->guards) {
+                    i->set_movable(false);
+                }
+            }
+        }        
     }
 
     return true;
@@ -124,11 +150,11 @@ bool TermShooter::draw(taskarg_sptr arg, float fps) {
 
     erase();
     
+    argts->ships.draw(arg);
     argts->generals.draw(arg);
     argts->bullets.draw(arg);
     argts->enemies.draw(arg);
     argts->guards.draw(arg);
-    argts->ships.draw(arg);
     argts->generals.draw(arg);
 
     NCursesManager::getInst().flip();   
