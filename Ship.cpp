@@ -29,7 +29,11 @@ void Ship::move(taskarg_sptr arg) {
         if(shot_interval_ <= 0) {
             argts->bullets.push_task(std::make_shared<Bullet>(x_, y_-1, 0, -1, "T"));
             argts->shot_cnt++;
-            argts->score -= 10;
+            
+            argts->score--;
+            if(argts->score<0) {
+                argts->score = 0;
+            }
 	  
             shot_interval_ = 5;
         }
@@ -40,6 +44,6 @@ void Ship::move(taskarg_sptr arg) {
 }
 
 void Ship::draw(taskarg_sptr arg) {
-    attrset(COLOR_PAIR(NCursesManager::CC_WHITE));
+    attrset(COLOR_PAIR(NCursesManager::CC_CYAN));
     mvprintw(y_, x_-1, "<+>");
 }
