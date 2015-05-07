@@ -6,7 +6,7 @@
 Ship::Ship() {
     x_  = 30;
     y_  = Field::PLAYER_LINE;
-    sx_ = 1;
+    sx_ = 3;
     sy_ = 1;
     shot_interval_ = 0;
 }
@@ -27,7 +27,7 @@ void Ship::move(taskarg_sptr arg) {
 	
     case ' ': 
         if(shot_interval_ <= 0) {
-            arg->bullets.push_task(std::make_shared<Bullet>(x_, y_-2, 0, -1, "T"));
+            arg->bullets.push_task(std::make_shared<Bullet>(x_+1, y_-2, 0, -1, "T"));
             arg->shot_cnt++;
             
             arg->score--;
@@ -45,5 +45,5 @@ void Ship::move(taskarg_sptr arg) {
 
 void Ship::draw(taskarg_sptr arg) {
     attrset(COLOR_PAIR(NCursesManager::CC_CYAN));
-    mvprintw(y_, x_-1, "<+>");
+    mvprintw(y_, x_, "<+>");
 }
