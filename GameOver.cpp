@@ -11,10 +11,6 @@ GameOver::GameOver(taskarg_sptr arg) {
         i->set_movable(false);
     }
     
-    for(auto& i : arg->ships) {
-        i->set_movable(false);
-    }
-    
     for(auto& i : arg->bullets) {
         i->set_movable(false);
     }
@@ -22,6 +18,8 @@ GameOver::GameOver(taskarg_sptr arg) {
     for(auto& i : arg->guards) {
         i->set_movable(false);
     }
+
+    arg->ship->set_movable(false);
 }
 	
 GameOver::~GameOver() {

@@ -9,6 +9,8 @@ Ship::Ship() {
     sx_ = 3;
     sy_ = 1;
     shot_interval_ = 0;
+    life_ = 3;
+    damaged_cnt_ = 0;
 }
 
 Ship::~Ship() {
@@ -41,9 +43,30 @@ void Ship::move(taskarg_sptr arg) {
     }
 		
     shot_interval_--;
+
+    damaged_cnt_--;
+    if(damaged_cnt_ < 0) {
+        damaged_cnt_ = 0;
+    }
 }
 
 void Ship::draw(taskarg_sptr arg) {
-    attrset(COLOR_PAIR(NCursesManager::CC_CYAN));
+    if(damaged_cnt_ > 0) {    
+        attrset(COLOR_PAIR(NCursesManager::CC_RED));
+    } else {
+        attrset(COLOR_PAIR(NCursesManager::CC_CYAN));
+    }
+    
     mvprintw(y_, x_, "<+>");
 }
+
+void Ship::damage() {
+    if(damaged_cnt_ > 0) return;
+    damaged_cnt_ = 20;
+
+    life_--;
+    if(life_ < 0) {
+        set_dead(true);
+    }
+}
+

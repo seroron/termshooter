@@ -18,11 +18,11 @@ struct TaskArgTS {
     TaskContainer<Bullet> bullets;
     TaskContainer<Enemy> enemies;
     TaskContainer<Guard> guards;
-    TaskContainer<Ship> ships;
+    std::shared_ptr<Ship> ship;
     TaskContainer<Task<TaskArgTS>> generals;
     
     int            shot_cnt;
-    int            score;		
+    int            score;
     GameState      game_state;
     int            key;
 };

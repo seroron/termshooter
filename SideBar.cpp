@@ -1,5 +1,7 @@
 #include "SideBar.h"
 
+#include <string>
+
 #include "TaskArgTS.h"
 #include "NCursesManager.h"
 #include "Field.h"
@@ -45,7 +47,11 @@ void SideBar::draw(taskarg_sptr arg)
     mvprintw(y++, x, "   %020d", arg->score);
     y++;
     mvprintw(y++, x, " LIFE");
-    mvprintw(y++, x, "   %020d", arg->score);
+    std::string life_str("   ");
+    for(int i=0; i<arg->ship->get_life(); i++) {
+        life_str += "O";
+    }
+    mvprintw(y++, x, life_str.c_str());
     
     y=15;
     mvprintw(y++, x, "------------------------");

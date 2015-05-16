@@ -44,14 +44,14 @@ void TermShooter::setup_game() {
         }
     }
 
-    arg->ships.push_task(std::make_shared<Ship>());
+    arg->ship = std::make_shared<Ship>();
 
     arg->generals.push_task(std::make_shared<Field>());
     arg->generals.push_task(std::make_shared<SideBar>());
     
     arg->score       = 0;
     arg->shot_cnt    = 0;
-
+    
     reset_ = false;
     
     FPSManager<taskargts_sptr> fps_manager;
@@ -89,7 +89,7 @@ bool TermShooter::move(taskargts_sptr arg) {
     
     // move objects
     arg->generals.move(arg);
-    arg->ships.move(arg);
+    arg->ship->move(arg);
     arg->bullets.move(arg);
     arg->enemies.move(arg);
     arg->guards.move(arg);
@@ -118,14 +118,18 @@ bool TermShooter::move(taskargts_sptr arg) {
                 bullet2->set_dead(true);
             }
         }
-        
-        for(auto ship: arg->ships) {
-            if(bullet->check_collision(*ship)) {
-                arg->generals.push_task(std::make_shared<GameOver>(arg));
-            }
-        }        
+
+        if(bullet->check_collision(*arg->ship)) {
+            bullet->set_dead(true);
+            arg->ship->damage();
+
+        }
     }
 
+    if(arg->ship->is_dead()) {
+        arg->generals.push_task(std::make_shared<GameOver>(arg));
+    }
+    
     return true;
 }
 
@@ -133,7 +137,7 @@ bool TermShooter::draw(taskargts_sptr arg, float fps) {
     
     erase();
     
-    arg->ships.draw(arg);
+    arg->ship->draw(arg);
     arg->enemies.draw(arg);
     arg->guards.draw(arg);
     arg->bullets.draw(arg);
