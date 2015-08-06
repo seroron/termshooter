@@ -13,6 +13,7 @@
 #include "Field.h"
 #include "SideBar.h"
 #include "GameOver.h"
+#include "GameClear.h"
 #include "TermShooter.h"
 #include "Task.h"
 #include "FPSManager.h"
@@ -35,7 +36,7 @@ void TermShooter::setup_game() {
             arg->enemies.push_task(std::make_shared<Enemy>(x, y, -1, 0));
         }
     }
-		
+    
     for(int x1=Field::FIELD_X_MIN+2; x1<Field::FIELD_X_MAX-5; x1+=10) {
         for(int x2=0; x2<5; x2++) {
             for(int y=Field::GUARD_LINE_MIN; y<=Field::GUARD_LINE_MAX; y++) {
@@ -128,6 +129,10 @@ bool TermShooter::move(taskargts_sptr arg) {
 
     if(arg->ship->is_dead()) {
         arg->generals.push_task(std::make_shared<GameOver>(arg));
+    }
+
+    if(arg->enemies.size() < 1) {
+        arg->generals.push_task(std::make_shared<GameClear>(arg));
     }
     
     return true;

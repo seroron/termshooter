@@ -72,6 +72,10 @@ public:
     spec_task_const_iterator end() const {
         return task_list_.end();
     }
+
+    size_t size() const {
+        return task_list_.size();
+    }
     
 private:
     std::list<spec_task_sptr> task_list_;    

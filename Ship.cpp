@@ -9,7 +9,7 @@ Ship::Ship() {
     sx_ = 3;
     sy_ = 1;
     shot_interval_ = 0;
-    life_ = 3;
+    life_ = 2;
     damaged_cnt_ = 0;
 }
 

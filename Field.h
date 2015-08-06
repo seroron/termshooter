@@ -14,7 +14,7 @@ public:
     static const int GUARD_LINE_MIN = 27;
     static const int GUARD_LINE_MAX = 28;
 
-    static const int PLAYER_LINE = 30;
+    static const int PLAYER_LINE = 32;
 
     Field();
     virtual ~Field();
