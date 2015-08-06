@@ -10,7 +10,7 @@ TARGET   := termshooter
 LIBRARY  := -lncurses
 CXXFLAGS := -std=c++1y -I/usr/include/ncurses -Wall -Wextra -Wno-unused-parameter -O2 
 
-SRC_DIR  += .
+SRC_DIR  += src
 SRC      += $(foreach dir,$(SRC_DIR), $(wildcard $(dir)/*.cpp)) 
 OBJECT   := $(subst .cpp,.o,$(filter %.cpp,$(SRC)))
 DEP_FILE := $(OBJECT:.o=.d)
